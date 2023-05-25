@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Definizione del documento WSDL (Web Services Description Language) per il servizio di conversione di valuta -->
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://localhost/currency_converter/" targetNamespace="http://localhost/currency_converter/">
+    <types>
+        <!-- Definizione dello schema XML per i tipi di dati e le strutture utilizzate nel servizio -->
+        <xsd:schema targetNamespace="http://localhost/currency_converter/">
+            <!-- Definizione dell'elemento convertCurrencyRequest -->
+            <xsd:element name="convertCurrencyRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!-- Definizione dei parametri di input per la richiesta di conversione di valuta: amount, fromCurrency e toCurrency -->
+                        <xsd:element name="amount" type="xsd:float"/>
+                        <xsd:element name="fromCurrency" type="xsd:string"/>
+                        <xsd:element name="toCurrency" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+            <!-- Definizione dell'elemento convertCurrencyResponse -->
+            <xsd:element name="convertCurrencyResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!-- Definizione del parametro di output per la risposta di conversione di valuta: result -->
+                        <xsd:element name="result" type="xsd:float"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+        </xsd:schema>
+    </types>
+    <!-- Definizione del messaggio di richiesta convertCurrencyRequestMessage -->
+    <message name="convertCurrencyRequestMessage">
+        <!-- Associazione dei parametri di input dell'operazione convertCurrency all'elemento convertCurrencyRequest -->
+        <part name="parameters" element="tns:convertCurrencyRequest"/>
+    </message>
+    <!-- Definizione del messaggio di risposta convertCurrencyResponseMessage -->
+    <message name="convertCurrencyResponseMessage">
+        <!-- Associazione dei parametri di output dell'operazione convertCurrency all'elemento convertCurrencyResponse -->
+        <part name="parameters" element="tns:convertCurrencyResponse"/>
+    </message>
+    
+    <!-- Definizione del PortType per il servizio di conversione di valuta -->
+    <portType name="CurrencyConverterPortType">
+        <!-- Definizione dell'operazione convertCurrency nel PortType -->
+        <operation name="convertCurrency">
+            <!-- Specifica del messaggio di input per l'operazione convertCurrency -->
+            <input message="tns:convertCurrencyRequestMessage"/>
+            <!-- Specifica del messaggio di output per l'operazione convertCurrency -->
+            <output message="tns:convertCurrencyResponseMessage"/>
+        </operation>
+    </portType>
+    
+    <!-- Definizione del Binding per il servizio di conversione di valuta -->
+    <binding name="CurrencyConverterBinding" type="tns:CurrencyConverterPortType">
+        <!-- Associazione del Binding al protocollo SOAP e al trasporto HTTP -->
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <!-- Definizione dell'operazione convertCurrency nel Binding -->
+        <operation name="convertCurrency">
+            <!-- Specifica dell'azione SOAP per l'operazione convertCurrency -->
+            <soap:operation soapAction="http://localhost/currency_converter/convertCurrency"/>
+            <!-- Definizione del messaggio di input SOAP per l'operazione convertCurrency -->
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <!-- Definizione del messaggio di output SOAP per l'operazione convertCurrency -->
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    
+    <!-- Definizione del servizio CurrencyConverterService -->
+    <service name="CurrencyConverterService">
+        <!-- Definizione del Port per il servizio CurrencyConverterService -->
+        <port name="CurrencyConverterPort" binding="tns:CurrencyConverterBinding">
+            <!-- Specifica dell'indirizzo del server che implementa il servizio CurrencyConverterService -->
+            <soap:address location="http://localhost/currency_converter/server.php"/>
+        </port>
+    </service>
+</definitions>
